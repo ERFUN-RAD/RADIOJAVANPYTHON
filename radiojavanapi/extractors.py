@@ -144,8 +144,34 @@ def extract_music_playlist(data) -> MusicPlaylist:
     data['is_my_playlist'] = data.pop('myplaylist')
     data['is_public'] = data.pop('public')
     data['has_custom_photo'] = data.pop('custom_photo')
-    data["sync"] = True if data.pop('sync', None) else False
+    data["sync"] = data.pop('sync', None) 
     data["songs"] = [extract_song(song) for song in data.pop('items',[])]
+    
+    required_fields = ['id', 'title', 'count', 'created_at', 'created_by', 
+                      'last_updated_at', 'share_link', 'followers', 'is_public',
+                      'is_my_playlist', 'photo', 'has_custom_photo', 'thumbnail']
+    
+    for field in required_fields:
+        if field not in data:
+            if field == 'count':
+                data[field] = len(data['songs'])
+            elif field == 'followers':
+                data[field] = 0
+            elif field == 'share_link':
+                data[field] = f"https://www.radiojavan.com/playlists/{data.get('id', '')}"
+            else:
+                data[field] = ""
+    
+    optional_fields = {
+        'following': None,
+        'sync': None,
+        'photo_player': None
+    }
+    
+    for field, default_value in optional_fields.items():
+        if field not in data:
+            data[field] = default_value
+    
     return MusicPlaylist(**data)
 
 def extract_short_user(data) -> Story:
@@ -177,3 +203,4 @@ def extract_my_playlists(data):
     
 def extract_notifications_status(data) -> NotificationsStatus:
     return NotificationsStatus(**data)
+
