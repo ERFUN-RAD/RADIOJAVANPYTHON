@@ -12,7 +12,7 @@ requirements = [
 ]
 
 setup(
-    name='radiojavanpython',
+    name='radiojavanapi',  # همین اسم اصلی رو نگه دار
     version='0.5.1',
     author='ERFUN-RAD',
     author_email='erfun.rad@gmail.com', 
@@ -22,14 +22,14 @@ setup(
     keywords=[
         'radiojavan private api', 'radiojavan-private-api', 'radiojavan api',
         'radiojavan-api', 'rj api', 'rj-api', 'radiojavan', 'radio javan',
-        'radio-javan', 'radiojavanpython'
+        'radio-javan'
     ],
     description='THIS BUG-FREE VERSION OF THE RADIO JAVAN API WRAPPER IS FAST AND RELIABLE',
     long_description=README,
     long_description_content_type='text/markdown',
     packages=find_packages(exclude=['*tests*']),
     python_requires=">=3.7",
-    include_package_data=True,
+    include_package_data=False,  # این False باشه تا مشکل license-file پیش نیاد
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
