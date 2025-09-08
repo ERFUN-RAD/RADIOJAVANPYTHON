@@ -51,6 +51,13 @@ def extract_song(data) -> Song:
     data["downloads"] = to_int(data.pop('downloads'))
     data["related_songs"] = [extract_short_data(song, Song) for song in data.pop('related',[])]
     data["stories"] = [extract_story(story) for story in data.pop('selfies',[])]
+    # Handle item field (convert to string if it's an integer)
+    if 'item' in data and isinstance(data['item'], int):
+        data['item'] = str(data['item'])
+    # Provide default values for missing required fields
+    data['date'] = data.get('date', '')
+    data['credits'] = data.get('credits', '')
+    data['lyric'] = data.get('lyric', '')
     return Song(**data)
 
 def extract_video(data) -> Video:
