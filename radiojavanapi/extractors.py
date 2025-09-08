@@ -11,16 +11,16 @@ from typing import Optional, Dict, Any
 def clean_url(url):
     if not url:
         return url
-    # Remove non-breaking spaces and other invalid characters
+    
     url = url.replace('\xa0', '').strip()
-    # Remove extra parts after valid URL (e.g., "(ft-namito-the-siin)/...")
+    
     parsed_url = urlparse(url)
     clean_path = re.sub(r'\s*\(.*?\)/.*$', '', parsed_url.path)
     return urlunparse(parsed_url._replace(path=clean_path))
 
 def ensure_required_fields(data: Dict[str, Any], model_class, context: str = "") -> Dict[str, Any]:
     """Ensure all required fields for a model are present with default values"""
-    # لیست فیلدهای required از مدل (این رو باید بر اساس مدل‌های واقعی تنظیم کنی)
+    
     required_fields_map = {
         'Song': ['id', 'name', 'artist', 'plays', 'likes', 'dislikes', 'downloads', 'item'],
         'MusicPlaylist': ['id', 'title', 'count', 'created_at', 'created_by', 'last_updated_at', 
@@ -35,14 +35,20 @@ def ensure_required_fields(data: Dict[str, Any], model_class, context: str = "")
         'Account': ['id', 'username', 'default_thumbnail', 'has_subscription', 
                    'has_custom_photo', 'is_verified'],
         'Story': ['id', 'is_verified', 'lq_link', 'song_id', 'user'],
-        'ShortData': ['id', 'title', 'permlink', 'photo']
+        'ShortData': ['id', 'title', 'permlink', 'photo'],
+        'ShortUser': ['id', 'username', 'thumbnail', 'share_link']  
     }
     
     model_name = model_class.__name__
+    
+    
+    if 'id' in data and isinstance(data['id'], int):
+        data['id'] = str(data['id'])
+    
     if model_name in required_fields_map:
         for field in required_fields_map[model_name]:
             if field not in data:
-                # مقادیر پیش‌فرض بر اساس نوع فیلد
+                
                 if field in ['plays', 'likes', 'dislikes', 'downloads', 'views', 'count', 'followers_count']:
                     data[field] = 0
                 elif field in ['is_public', 'is_my_playlist', 'has_custom_photo', 'is_verified', 'following']:
@@ -50,11 +56,16 @@ def ensure_required_fields(data: Dict[str, Any], model_class, context: str = "")
                 elif field in ['item', 'lyric', 'credits', 'date', 'created_at', 'last_updated_at']:
                     data[field] = ''
                 elif field == 'share_link':
-                    data[field] = f"https://www.radiojavan.com/{model_name.lower()}s/{data.get('id', '')}"
+                    username = data.get('username', 'unknown')
+                    data[field] = f"https://www.radiojavan.com/profile/{username}"
                 elif field == 'photo':
                     data[field] = 'https://www.radiojavan.com/default_photo.jpg'
                 elif field == 'thumbnail':
                     data[field] = data.get('photo', 'https://www.radiojavan.com/default_thumb.jpg')
+                elif field == 'id':
+                    data[field] = 'unknown_id'
+                elif field == 'username':
+                    data[field] = 'unknown_user'
                 else:
                     data[field] = f"unknown_{field}"
     
@@ -95,7 +106,7 @@ def extract_song(data) -> Song:
     data["related_songs"] = [extract_short_data(song, Song) for song in data.pop('related', [])]
     data["stories"] = [extract_story(story) for story in data.pop('selfies', [])]
     
-    # Handle optional fields
+    
     if 'item' in data and isinstance(data['item'], int):
         data['item'] = str(data['item'])
     data['date'] = data.get('date', '')
@@ -143,6 +154,10 @@ def extract_artist(data) -> Artist:
     return Artist(**data)
 
 def extract_short_data(data, data_type) -> ShortData:
+    
+    if 'id' in data and isinstance(data['id'], int):
+        data['id'] = str(data['id'])
+    
     if data_type == Song or data_type == Video:
         data["name"] = data.get("song", "Unknown")
         data["title"] = f"{data.get('artist', 'Unknown')} - {data['name']}"
@@ -165,7 +180,7 @@ def extract_short_data(data, data_type) -> ShortData:
         data["title"] = f"{data['artist']} - \"{data['name']}\""
         data["permlink"] = data.get("show_permlink", "")
     
-    # Clean URLs
+    
     for url_field in ['photo', 'photo_player', 'thumbnail']:
         if url_field in data:
             data[url_field] = clean_url(data[url_field])
@@ -199,7 +214,7 @@ def extract_music_playlist(data) -> MusicPlaylist:
     
     data = ensure_required_fields(data, MusicPlaylist)
     
-    # Optional fields
+    
     optional_fields = {'following': None, 'photo_player': None}
     for field, default_value in optional_fields.items():
         if field not in data:
@@ -208,7 +223,28 @@ def extract_music_playlist(data) -> MusicPlaylist:
     return MusicPlaylist(**data)
 
 def extract_short_user(data) -> ShortUser:
-    data = ensure_required_fields(data, ShortUser)
+    
+    if 'share_link' not in data:
+        username = data.get('username', 'unknown')
+        data['share_link'] = f"https://www.radiojavan.com/profile/{username}"
+    
+    
+    if 'id' in data and isinstance(data['id'], int):
+        data['id'] = str(data['id'])
+    
+    
+    required_fields = ['id', 'username', 'thumbnail', 'share_link']
+    for field in required_fields:
+        if field not in data:
+            if field == 'id':
+                data[field] = 'unknown_id'
+            elif field == 'username':
+                data[field] = 'unknown_user'
+            elif field == 'thumbnail':
+                data[field] = 'https://www.radiojavan.com/default_thumb.jpg'
+            elif field == 'share_link':
+                data[field] = 'https://www.radiojavan.com/profile/unknown'
+    
     return ShortUser(**data)
 
 def extract_story(data) -> Story:
@@ -216,11 +252,19 @@ def extract_story(data) -> Story:
     data['lq_link'] = data.pop('hls', '')
     data["song_id"] = data.pop('mp3', '')
     data['is_my_story'] = data.pop('myselfie', False)
-    data['user'] = extract_short_user(data.pop('user', {}))
+    
+    user_data = data.pop('user', {})
+    if not user_data or not isinstance(user_data, dict):
+        user_data = {'username': 'unknown', 'id': 'unknown_id', 'thumbnail': ''}
+    
+    data['user'] = extract_short_user(user_data)
     data = ensure_required_fields(data, Story)
     return Story(**data)
 
 def extract_album(data):
+    if 'id' in data and isinstance(data['id'], int):
+        data['id'] = str(data['id'])
+    
     data["tracks"] = [extract_song(song) for song in data.pop('album_tracks', [])]
     data['name'] = data.pop('album_album', 'Unknown Album')
     data['artist'] = data.pop('album_artist', 'Unknown Artist')
