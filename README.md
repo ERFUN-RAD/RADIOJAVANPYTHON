@@ -1,40 +1,36 @@
-[![PyPI version](https://badge.fury.io/py/radiojavanapi.svg)](https://badge.fury.io/py/radiojavanapi)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/xHossein/radiojavanapi/blob/master/LICENSE)
-[![Downloads](https://pepy.tech/badge/radiojavanapi)](https://pepy.tech/project/radiojavanapi)
+![RADIO JAVAN LOGO](https://www.radiojavan.com/images/rj-touch-icon-144.png)
 
-# radiojavanapi
-**radiojavanapi** is a Python library for accessing RadioJavan's features. With this library you can create Telegram Bots with ease and simplicity.
+# RADIOJAVANPYTHON
 
-Support Python >= 3.7
+THIS BUG-FREE VERSION OF THE RADIO JAVAN API WRAPPER IS FAST AND RELIABLE, OFFERING SEAMLESS ACCESS TO RADIO JAVAN FEATURES WITH PYTHON 3.7+ SUPPORT.
 
-RadioJavan API valid for 19 March 2023 (last reverse-engineering check)
+SUPPORT PYTHON &gt;= 3.7
 
-## Features
-* Get full info of a Song, Video, Podcast, Story, Playlist, Artist, Album, User and your Account
-* Login by email and password
-* Sign up to RadioJavan
-* Like and Unlike a Song, Video, Podcast and Story
-* Follow and Unfollow a Artist, User or MusicPlaylist
-* Get followers and following of a user
-* Create, Rename and Delete a playlist
-* Add song or video to playlist or Remove from it
-* Edit and Deactive account
-* Upload and Remove profile photo
-* Search and get trending, popular and ... medias\
-and much more else
+RADIO JAVAN API VALID FOR 19 MARCH 2023 (LAST REVERSE-ENGINEERING CHECK)
 
-## Installation
-**From PyPI**
-```
-pip install radiojavanapi
-```
+## FEATURES
 
-**From Github**
-```
-pip install git+https://github.com/xHossein/radiojavanapi@master
+- GET FULL INFO OF A SONG, VIDEO, PODCAST, STORY, PLAYLIST, ARTIST, ALBUM, USER, AND YOUR ACCOUNT
+- LOGIN BY EMAIL AND PASSWORD
+- SIGN UP TO RADIO JAVAN
+- LIKE AND UNLIKE A SONG, VIDEO, PODCAST, AND STORY
+- FOLLOW AND UNFOLLOW AN ARTIST, USER, OR MUSIC PLAYLIST
+- GET FOLLOWERS AND FOLLOWING OF A USER
+- CREATE, RENAME, AND DELETE A PLAYLIST
+- ADD SONG OR VIDEO TO PLAYLIST OR REMOVE FROM IT
+- EDIT AND DEACTIVATE ACCOUNT
+- UPLOAD AND REMOVE PROFILE PHOTO
+- SEARCH AND GET TRENDING, POPULAR, AND MORE MEDIAS AND MUCH MORE ELSE
+
+## INSTALLATION
+
+**FROM GITHUB**
+
+```bash
+pip install git+https://github.com/ERFUN-RAD/RADIOJAVANPYTHON
 ```
 
-## Basic Usage
+## BASIC USAGE
 
 ```python
 from radiojavanapi import Client
@@ -49,32 +45,30 @@ print(f"""
         Artist: {song.artist}
         HQ-Link: {song.hq_link}
 """)
-
 ```
-<details>
-    <summary>Show Output</summary>
+
+SHOW OUTPUT
 
 ```
 Name: Baz Mirim Baham (Ft Sami Low)
 Artist: Sijal
 HQ-Link: https://host2.mediacon-rj.app/media/mp3/aac-256/99926-cf9dd3814907dbb.m4a
 ```
-</details>
 
-## Documentation
-You can find the documentation [here](https://xhossein.github.io/radiojavanapi/).
+## DOCUMENTATION
 
-## Support
+YOU CAN FIND THE DOCUMENTATION HERE.
 
-- Create a [GitHub issue](https://github.com/xHossein/radiojavanapi/issues) for bug reports, feature requests, or questions
-- Add a ⭐️ [star on GitHub](https://github.com/xHossein/radiojavanapi) to support the project!
+## SUPPORT
 
+- CREATE A GITHUB ISSUE FOR BUG REPORTS, FEATURE REQUESTS, OR QUESTIONS
+- CONTACT US ON TELEGRAM AT @ASYNCERFAN
+- ADD A ⭐️ STAR ON GITHUB TO SUPPORT THE PROJECT!
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+## CONTRIBUTING
 
-## Changelog
-You can find this repository's changelog [here](https://github.com/xHossein/radiojavanapi/blob/master/CHANGELOG.md).
+PULL REQUESTS ARE WELCOME. FOR MAJOR CHANGES, PLEASE OPEN AN ISSUE FIRST TO DISCUSS WHAT YOU WOULD LIKE TO CHANGE. CHECK OUR CONTRIBUTING GUIDELINES FOR MORE DETAILS.
 
-## License
-This project is licensed under the [MIT license](https://choosealicense.com/licenses/mit/).
+## LICENSE
+
+THIS PROJECT IS LICENSED UNDER THE MIT LICENSE.
