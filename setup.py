@@ -15,7 +15,7 @@ setup(
     name='radiojavanpython',
     version='0.5.1',
     author='ERFUN-RAD',
-    author_email='erfun.rad@gmail.com',
+    author_email='erfun.rad@gmail.com', 
     license='MIT',
     url='https://github.com/ERFUN-RAD/RADIOJAVANPYTHON',
     install_requires=requirements,
@@ -43,4 +43,3 @@ setup(
         'Programming Language :: Python :: 3.12',
     ]
 )
-
