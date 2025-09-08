@@ -4,6 +4,18 @@ from radiojavanapi.models import (
             ShortUser, Song, MusicPlaylist, Story, User, Video,
             ShortData, Podcast, SearchResults, VideoPlaylist
             )
+import re
+from urllib.parse import urlparse, urlunparse
+
+def clean_url(url):
+    if not url:
+        return url
+    # Remove non-breaking spaces and other invalid characters
+    url = url.replace('\xa0', '').strip()
+    # Remove extra parts after valid URL (e.g., "(ft-namito-the-siin)/...")
+    parsed_url = urlparse(url)
+    clean_path = re.sub(r'\s*\(.*?\)/.*$', '', parsed_url.path)
+    return urlunparse(parsed_url._replace(path=clean_path))
 
 def extract_account(data) -> Account:
     data["default_thumbnail"] = data.pop('default_thumb')
@@ -78,29 +90,30 @@ def extract_artist(data) -> Artist:
 def extract_short_data(data, type) -> ShortData:
     if type == Song or type == Video:
         data["name"] = data["song"]
-    
     elif type == Album:
         data["artist"] = data["album_artist"]
         data["name"] = data["album_album"]
-      
     elif type == Podcast:
         data["artist"] = data["podcast_artist"]
         data["name"] = data["title"]  
         data["title"] = '{} - \"{}\"'.format(data["artist"], data["name"])
-        
     elif type == MusicPlaylist:
         data["name"] = data["title"]
         data["title"] = '{} - \"{}\"'.format(data["name"], data["created_by"])
-        
     elif type == VideoPlaylist:
         data["name"] = data["title"]
-        
     elif type == 'show':
         data["artist"] = data["date"]
         data["name"] = data["show_title"]
         data["title"] = '{} - \"{}\"'.format(data["artist"], data["name"])
         data["permlink"] = data["show_permlink"]
-        
+    
+    # Clean URLs for photo and photo_player fields
+    if 'photo' in data:
+        data['photo'] = clean_url(data['photo'])
+    if 'photo_player' in data:
+        data['photo_player'] = clean_url(data['photo_player'])
+    
     return ShortData(**data)
 
 def extract_search_results(data) -> SearchResults:
