@@ -15,6 +15,7 @@ setup(
     name='radiojavanpython',
     version='0.5.1',
     author='ERFUN-RAD',
+    author_email='your.email@example.com',  # ایمیل خودتون رو اینجا وارد کنید
     license='MIT',
     url='https://github.com/ERFUN-RAD/RADIOJAVANPYTHON',
     install_requires=requirements,
